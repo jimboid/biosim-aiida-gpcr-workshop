@@ -1,0 +1,13 @@
+{
+    "CONFIG_VERSION": {
+        "CURRENT": 9,
+        "OLDEST_COMPATIBLE": 9
+    },
+    "profiles": {},
+    "options": {
+        "autofill.user.email": "demo@test.com",
+        "autofill.user.first_name": "demo",
+        "autofill.user.last_name": "aiida",
+        "autofill.user.institution": "psdi"
+    }
+}
