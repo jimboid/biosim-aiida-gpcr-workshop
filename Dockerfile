@@ -10,8 +10,8 @@ WORKDIR $HOME
 
 # Mamba is faster and better at resolving AiiDA.
 RUN conda install mamba
-RUN mamba install -c conda-forge -y aiida-core=2.6.3 postgresql=15.1
-RUN conda config --env --add pinned_packages postgresql=15.1
+RUN mamba install -c conda-forge -y aiida-core=2.6.3 postgresql=17.2
+RUN conda config --env --add pinned_packages postgresql=17.2
 
 USER root
 WORKDIR /opt/
