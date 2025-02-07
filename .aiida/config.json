@@ -1,0 +1,44 @@
+{
+    "CONFIG_VERSION": {
+        "CURRENT": 9,
+        "OLDEST_COMPATIBLE": 9
+    },
+    "profiles": {
+        "demo": {
+            "PROFILE_UUID": "0c38dc53cb0a44d8ac74e6576674f925",
+            "storage": {
+                "backend": "core.psql_dos",
+                "config": {
+                    "database_engine": "postgresql_psycopg2",
+                    "database_hostname": "localhost",
+                    "database_port": 5432,
+                    "database_name": "demo_jovyan_48f1a43da738d98e2a58bbe4562efa92",
+                    "database_username": "aiida_qs_jovyan_48f1a43da738d98e2a58bbe4562efa92",
+                    "database_password": "HklF2p8TexoBfVB5",
+                    "repository_uri": "file:///home/jovyan/.aiida/repository/demo"
+                }
+            },
+            "process_control": {
+                "backend": "rabbitmq",
+                "config": {
+                    "broker_protocol": "amqp",
+                    "broker_username": "guest",
+                    "broker_password": "guest",
+                    "broker_host": "127.0.0.1",
+                    "broker_port": 5672,
+                    "broker_virtual_host": ""
+                }
+            },
+            "test_profile": false,
+            "options": {},
+            "default_user_email": "demo@test.com"
+        }
+    },
+    "default_profile": "demo",
+    "options": {
+        "autofill.user.email": "demo@test.com",
+        "autofill.user.first_name": "demo",
+        "autofill.user.last_name": "aiida",
+        "autofill.user.institution": "psdi"
+    }
+}

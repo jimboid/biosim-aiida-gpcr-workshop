@@ -1,0 +1,92 @@
+2023-10-10 15:20:22 circus[548] [INFO] Starting master on pid 548
+2023-10-10 15:20:22 circus[548] [INFO] Arbiter now waiting for commands
+2023-10-10 15:20:22 circus[548] [INFO] aiida-demo started
+2023-10-10 15:20:22 circus[548] [INFO] circusd-stats started
+2023-10-10 15:20:22 circus[553] [INFO] Starting the stats streamer
+2023-10-10 15:22:54 circus[548] [INFO] Arbiter exiting
+2023-10-10 15:22:54 circus[553] [INFO] Stats streamer stopped
+2023-10-10 15:22:54 tornado.general[553] [WARNING] Got events for stream <zmq.eventloop.zmqstream.ZMQStream object at 0x7ffb7ff65450> attached to closed socket: Socket operation on non-socket
+2023-10-10 15:22:54 circus[553] [INFO] Stats streamer stopped
+2023-10-10 15:22:54 circus[553] [INFO] Stats streamer stopped
+2023-10-10 15:22:54 circus[548] [INFO] circusd-stats stopped
+2023-10-10 15:22:54 tornado.application[548] [ERROR] Exception in callback <bound method Arbiter.manage_watchers of <circus.arbiter.Arbiter object at 0x7fad5675a690>>
+Traceback (most recent call last):
+  File "/opt/conda/envs/aiida/lib/python3.11/site-packages/tornado/ioloop.py", line 919, in _run
+    val = self.callback()
+          ^^^^^^^^^^^^^^^
+  File "/opt/conda/envs/aiida/lib/python3.11/site-packages/circus/util.py", line 1038, in wrapper
+    raise ConflictError("arbiter is already running %s command"
+circus.exc.ConflictError: arbiter is already running arbiter_stop command
+2023-10-10 15:22:54 circus[548] [INFO] aiida-demo stopped
+2023-10-10 15:25:31 circus[1249] [INFO] Starting master on pid 1249
+2023-10-10 15:25:31 circus[1249] [INFO] Arbiter now waiting for commands
+2023-10-10 15:25:31 circus[1249] [INFO] aiida-demo started
+2023-10-10 15:25:31 circus[1249] [INFO] circusd-stats started
+2023-10-10 15:25:32 circus[1254] [INFO] Starting the stats streamer
+2023-10-10 15:26:14 circus[1249] [INFO] Arbiter exiting
+2023-10-10 15:26:14 circus[1254] [INFO] Stats streamer stopped
+2023-10-10 15:26:14 tornado.general[1254] [WARNING] Got events for stream <zmq.eventloop.zmqstream.ZMQStream object at 0x7faebad9cfd0> attached to closed socket: Socket operation on non-socket
+2023-10-10 15:26:14 circus[1254] [INFO] Stats streamer stopped
+2023-10-10 15:26:14 circus[1254] [INFO] Stats streamer stopped
+2023-10-10 15:26:14 tornado.application[1249] [ERROR] Exception in callback <bound method Arbiter.manage_watchers of <circus.arbiter.Arbiter object at 0x7f2626a2ad10>>
+Traceback (most recent call last):
+  File "/opt/conda/envs/aiida/lib/python3.11/site-packages/tornado/ioloop.py", line 919, in _run
+    val = self.callback()
+          ^^^^^^^^^^^^^^^
+  File "/opt/conda/envs/aiida/lib/python3.11/site-packages/circus/util.py", line 1038, in wrapper
+    raise ConflictError("arbiter is already running %s command"
+circus.exc.ConflictError: arbiter is already running arbiter_stop command
+2023-10-10 15:26:14 circus[1249] [INFO] circusd-stats stopped
+2023-10-10 15:26:14 circus[1249] [INFO] aiida-demo stopped
+2023-10-10 15:26:54 circus[1755] [INFO] Starting master on pid 1755
+2023-10-10 15:26:54 circus[1755] [INFO] Arbiter now waiting for commands
+2023-10-10 15:26:54 circus[1755] [INFO] aiida-demo started
+2023-10-10 15:26:54 circus[1755] [INFO] circusd-stats started
+2023-10-10 15:26:54 circus[1760] [INFO] Starting the stats streamer
+2023-10-10 15:27:13 circus[1755] [INFO] Arbiter exiting
+2023-10-10 15:27:13 circus[1760] [INFO] Stats streamer stopped
+2023-10-10 15:27:13 tornado.general[1760] [WARNING] Got events for stream <zmq.eventloop.zmqstream.ZMQStream object at 0x7f08b3794e50> attached to closed socket: Socket operation on non-socket
+2023-10-10 15:27:13 circus[1760] [INFO] Stats streamer stopped
+2023-10-10 15:27:13 circus[1760] [INFO] Stats streamer stopped
+2023-10-10 15:27:13 circus[1755] [INFO] circusd-stats stopped
+2023-10-10 15:27:13 tornado.application[1755] [ERROR] Exception in callback <bound method Arbiter.manage_watchers of <circus.arbiter.Arbiter object at 0x7f40abc99d50>>
+Traceback (most recent call last):
+  File "/opt/conda/envs/aiida/lib/python3.11/site-packages/tornado/ioloop.py", line 919, in _run
+    val = self.callback()
+          ^^^^^^^^^^^^^^^
+  File "/opt/conda/envs/aiida/lib/python3.11/site-packages/circus/util.py", line 1038, in wrapper
+    raise ConflictError("arbiter is already running %s command"
+circus.exc.ConflictError: arbiter is already running arbiter_stop command
+2023-10-10 15:27:13 circus[1755] [INFO] aiida-demo stopped
+2023-10-10 15:28:11 circus[2161] [INFO] Starting master on pid 2161
+2023-10-10 15:28:11 circus[2161] [INFO] Arbiter now waiting for commands
+2023-10-10 15:28:11 circus[2161] [INFO] aiida-demo started
+2023-10-10 15:28:11 circus[2161] [INFO] circusd-stats started
+2023-10-10 15:28:11 circus[2166] [INFO] Starting the stats streamer
+2023-10-10 15:29:27 circus[2161] [INFO] Arbiter exiting
+2023-10-10 15:29:27 circus[2166] [INFO] Stats streamer stopped
+2023-10-10 15:29:27 tornado.general[2166] [WARNING] Got events for stream <zmq.eventloop.zmqstream.ZMQStream object at 0x7f3ae92ad110> attached to closed socket: Socket operation on non-socket
+2023-10-10 15:29:27 circus[2166] [INFO] Stats streamer stopped
+2023-10-10 15:29:27 circus[2166] [INFO] Stats streamer stopped
+2023-10-10 15:29:27 circus[2161] [INFO] circusd-stats stopped
+2023-10-10 15:29:28 circus[2161] [INFO] aiida-demo stopped
+2023-10-10 16:07:44 circus[282] [INFO] Starting master on pid 282
+2023-10-10 16:07:44 circus[282] [INFO] Arbiter now waiting for commands
+2023-10-10 16:07:44 circus[282] [INFO] aiida-demo started
+2023-10-10 16:07:44 circus[282] [INFO] circusd-stats started
+2023-10-10 16:07:44 circus[287] [INFO] Starting the stats streamer
+2023-10-10 16:08:15 circus[282] [INFO] Arbiter exiting
+2023-10-10 16:08:15 circus[287] [INFO] Stats streamer stopped
+2023-10-10 16:08:15 tornado.general[287] [WARNING] Got events for stream <zmq.eventloop.zmqstream.ZMQStream object at 0x7fabddc70f50> attached to closed socket: Socket operation on non-socket
+2023-10-10 16:08:15 circus[287] [INFO] Stats streamer stopped
+2023-10-10 16:08:15 circus[287] [INFO] Stats streamer stopped
+2023-10-10 16:08:15 circus[282] [INFO] circusd-stats stopped
+2023-10-10 16:08:15 tornado.application[282] [ERROR] Exception in callback <bound method Arbiter.manage_watchers of <circus.arbiter.Arbiter object at 0x7f87c7724e90>>
+Traceback (most recent call last):
+  File "/opt/conda/envs/aiida/lib/python3.11/site-packages/tornado/ioloop.py", line 919, in _run
+    val = self.callback()
+          ^^^^^^^^^^^^^^^
+  File "/opt/conda/envs/aiida/lib/python3.11/site-packages/circus/util.py", line 1038, in wrapper
+    raise ConflictError("arbiter is already running %s command"
+circus.exc.ConflictError: arbiter is already running arbiter_stop command
+2023-10-10 16:08:15 circus[282] [INFO] aiida-demo stopped

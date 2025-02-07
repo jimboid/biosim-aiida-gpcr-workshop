@@ -1,0 +1,1 @@
+/opt/conda/envs/aiida/bin/postgres "-D" "/home/jovyan/.aiida/aiida_db"
