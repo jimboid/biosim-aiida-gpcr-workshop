@@ -1,8 +1,11 @@
 # Start with BioSim base image.
 ARG BASE_IMAGE=latest
-FROM harbor.stfc.ac.uk/biosimulation-cloud/biosim-jupyter-base:$BASE_IMAGE
+FROM ghcr.io/jimboid/biosim-jupyter-base:$BASE_IMAGE
 
 LABEL maintainer="James Gebbie-Rayet <james.gebbie@stfc.ac.uk>"
+LABEL org.opencontainers.image.source=https://github.com/jimboid/biosim-aiida-gpcr-workshop
+LABEL org.opencontainers.image.description="A container environment for the PSDI workshop on AiiDA tools for data collection."
+LABEL org.opencontainers.image.licenses=MIT
 
 # Switch to jovyan user.
 USER $NB_USER
