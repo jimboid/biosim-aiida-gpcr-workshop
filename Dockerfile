@@ -1,11 +1,13 @@
 # Start with BioSim base image.
 ARG BASE_IMAGE=latest
-FROM ghcr.io/jimboid/biosim-jupyter-base:$BASE_IMAGE
+FROM ghcr.io/jimboid/biosim-jupyterhub-base:$BASE_IMAGE
 
 LABEL maintainer="James Gebbie-Rayet <james.gebbie@stfc.ac.uk>"
 LABEL org.opencontainers.image.source=https://github.com/jimboid/biosim-aiida-gpcr-workshop
 LABEL org.opencontainers.image.description="A container environment for the PSDI workshop on AiiDA tools for data collection."
 LABEL org.opencontainers.image.licenses=MIT
+
+ARG GMX_VERSION=2025.0
 
 # Switch to jovyan user.
 USER $NB_USER
@@ -38,23 +40,23 @@ RUN apt-get update --yes && \
 WORKDIR /tmp
 
 # Grab a specified version of gromacs
-RUN wget ftp://ftp.gromacs.org/gromacs/gromacs-2023.4.tar.gz && \
-    tar xvf gromacs-2023.4.tar.gz && \
-    rm gromacs-2023.4.tar.gz
+RUN wget ftp://ftp.gromacs.org/gromacs/gromacs-$GMX_VERSION.tar.gz && \
+    tar xvf gromacs-$GMX_VERSION.tar.gz && \
+    rm gromacs-$GMX_VERSION.tar.gz
 
 # make a build dir
-WORKDIR /tmp/gromacs-2023.4
+WORKDIR /tmp/gromacs-$GMX_VERSION
 RUN mkdir build
 
 # build gromacs
-WORKDIR /tmp/gromacs-2023.4/build
-RUN cmake .. -DCMAKE_INSTALL_PREFIX=/opt/gromacs-2023.4 -DGMX_BUILD_OWN_FFTW=ON -DGMX_OPENMP=ON -DGMXAPI=OFF -DCMAKE_BUILD_TYPE=Release
+WORKDIR /tmp/gromacs-$GMX_VERSION/build
+RUN cmake .. -DCMAKE_INSTALL_PREFIX=/opt/gromacs-$GMX_VERSION -DGMX_BUILD_OWN_FFTW=ON -DGMX_OPENMP=ON -DGMXAPI=OFF -DCMAKE_BUILD_TYPE=Release
 RUN make -j8
 RUN make install
 RUN rm -r /tmp/gromacs-2023.4 && \
-    chown -R 1000:100 /opt/gromacs-2023.4
+    chown -R 1000:100 /opt/gromacs-$GMX_VERSION
 
-ENV PATH=/opt/gromacs-2023.4/bin:$PATH
+ENV PATH=/opt/gromacs-$GMX_VERSION/bin:$PATH
 
 USER $NB_USER
 WORKDIR $HOME
