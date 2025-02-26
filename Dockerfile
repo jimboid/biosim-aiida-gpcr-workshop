@@ -28,9 +28,7 @@ RUN apt-get update --yes && \
     curl \
     ca-certificates \
     erlang \
-    cmake \
-    unzip \
-    xz-utils && \
+    unzip && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
     wget -c --no-check-certificate https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.10.14/rabbitmq-server-generic-unix-3.10.14.tar.xz && \
     tar -xf rabbitmq-server-generic-unix-3.10.14.tar.xz && \
