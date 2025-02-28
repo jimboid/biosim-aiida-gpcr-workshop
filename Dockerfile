@@ -41,9 +41,9 @@ RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
 RUN pip install aiida-gromacs vermouth==0.9.6
 RUN mamba install anaconda::libboost=1.73.0
 RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
-      mamba install -c salilab dssp; \
+      conda install -c salilab::dssp; \
     elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
-      mamba install salilab/osx-64::dssp; \
+      conda install salilab/osx-64::dssp; \
     fi
 
 RUN git clone https://github.com/jimboid/aiida-gromacs.git && \
