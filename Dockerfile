@@ -41,7 +41,7 @@ RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
 RUN pip install aiida-gromacs vermouth==0.9.6
 RUN mamba install anaconda::libboost=1.73.0
 RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
-      conda install -c salilab::dssp; \
+      conda install salilab::dssp; \
     elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
       conda install salilab/osx-64::dssp; \
     fi
