@@ -58,13 +58,7 @@ RUN conda config --env --add pinned_packages postgresql=17.2
 #    elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
 #      conda install conda-forge/linux-aarch64::gromacs=2024.5=nompi_h9afd374_100 -y; \
 #    fi
-RUN pip3 install aiida-gromacs vermouth==0.9.6
-RUN mamba install anaconda::libboost=1.73.0
-RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
-      mamba install -c salilab dssp; \
-    elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
-      mamba install salilab/osx-64::dssp; \
-    fi
+RUN pip3 install aiida-gromacs mdtraj vermouth
 
 RUN git clone https://github.com/jimboid/aiida-gromacs.git && \
     mv aiida-gromacs/examples/PTH2R_coarse-grained_files . && \
