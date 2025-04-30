@@ -5,6 +5,6 @@ sleep 2
 verdi config set warnings.rabbitmq_version False
 verdi config set warnings.showdeprecations false
 sleep 2
-verdi daemon start 2
+verdi daemon start 1
 sleep 3
 verdi status
