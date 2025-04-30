@@ -65,7 +65,6 @@ RUN git clone https://github.com/jimboid/aiida-gromacs.git && \
     mv aiida-gromacs/notebooks/PTH2R_coarse-grained_tutorial.ipynb . && \
     rm -rf aiida-gromacs
 
-COPY --chown=1000:100 .aiida /home/jovyan/.aiida
 COPY --chown=1000:100 aiida-stop /home/jovyan/
 
 RUN echo "./aiida-start" >> ~/.bashrc
