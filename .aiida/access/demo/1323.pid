@@ -1,1 +1,0 @@
-['/opt/conda/envs/aiida/bin/python3.11', '/opt/conda/envs/aiida/bin/verdi', '-p', 'demo', 'daemon', 'worker']
