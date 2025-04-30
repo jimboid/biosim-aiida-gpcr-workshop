@@ -1,0 +1,35 @@
+name: tests
+
+on:
+  repository_dispatch:
+    types: [test]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    name: Testing ${{ github.repository }}
+    steps:
+
+    - name: Test notebooks
+      shell: bash
+      run: |
+        docker run -t ghcr.io/${{ github.repository }}:dev bash -c "\
+          pip install pytest nbmake; \
+          find . -name '*.ipynb' | pytest --nbmake --nbmake-timeout=3600; "
+
+    - name: Authenticate with GHCR
+      id: ghcr-auth
+      uses: docker/login-action@v3.4.0
+      with:
+        registry: "ghcr.io"
+        username: ${{github.actor}}
+        password: ${{secrets.BUILD_TOKEN}}
+
+    - name: Push new tags
+      shell: bash
+      run: |
+        docker buildx imagetools create \
+          --tag ghcr.io/${{ github.repository }}:latest \
+          --tag ghcr.io/${{ github.repository }}:${{ github.event.client_payload.tag }} \
+          ghcr.io/${{ github.repository }}:dev
