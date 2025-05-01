@@ -26,26 +26,6 @@ RUN apt-get update --yes && \
     ln -sf /opt/rabbitmq_server-3.10.14/sbin/* /usr/local/bin/ && \
     chown -R 1000:100 /opt/rabbitmq_server-3.10.14
 
-WORKDIR /tmp
-
-# Grab a specified version of gromacs
-RUN wget ftp://ftp.gromacs.org/gromacs/gromacs-2023.4.tar.gz && \
-    tar xvf gromacs-2023.4.tar.gz && \
-    rm gromacs-2023.4.tar.gz
-
-# make a build dir
-RUN mkdir /tmp/gromacs-2023.4/build
-WORKDIR /tmp/gromacs-2023.4/build
-
-# build gromacs
-RUN cmake .. -DCMAKE_INSTALL_PREFIX=/opt/gromacs-2023.4 -DGMX_BUILD_OWN_FFTW=ON -DGMX_OPENMP=ON -DGMXAPI=OFF -DCMAKE_BUILD_TYPE=Release
-RUN make -j8
-RUN make install
-RUN rm -r /tmp/gromacs-2023.4 && \
-    chown -R 1000:100 /opt/gromacs-2023.4
-
-ENV PATH=/opt/gromacs-2023.4/bin:$PATH
-
 USER $NB_USER
 WORKDIR $HOME
 
@@ -53,11 +33,11 @@ WORKDIR $HOME
 RUN conda install mamba
 RUN mamba install -c conda-forge -y aiida-core=2.6.3 postgresql=17.2
 RUN conda config --env --add pinned_packages postgresql=17.2
-#RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
-#      conda install conda-forge/linux-64::gromacs=2024.5=nompi_h5f56185_100 -y; \
-#    elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
-#      conda install conda-forge/linux-aarch64::gromacs=2024.5=nompi_h9afd374_100 -y; \
-#    fi
+RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
+      conda install conda-forge/linux-64::gromacs=2024.5=nompi_h5f56185_100 -y; \
+    elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
+      conda install conda-forge/linux-aarch64::gromacs=2024.5=nompi_h9afd374_100 -y; \
+    fi
 RUN pip3 install aiida-gromacs mdtraj vermouth
 
 RUN git clone https://github.com/jimboid/aiida-gromacs.git && \
