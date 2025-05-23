@@ -15,7 +15,7 @@ jobs:
       shell: bash
       run: |
         docker run -t ghcr.io/${{ github.repository }}:dev bash -c "\
-          .aiida-start
+          .aiida-start; \
           pip install pytest nbmake; \
           find . -name '*.ipynb' | pytest --nbmake --nbmake-timeout=3600; \
           ! verdi process list -a | grep -E '\[(3.*?)\]'; echo $?; "
