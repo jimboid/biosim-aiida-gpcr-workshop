@@ -18,6 +18,7 @@ jobs:
           bash /home/jovyan/aiida-start; \
           pip install pytest nbmake; \
           find . -name '*.ipynb' | pytest --nbmake --nbmake-timeout=3600; \
+          sleep 20; \
           ! verdi process list -a | grep -E '\[(3.*?)\]|Waiting'; "
 
     - name: Authenticate with GHCR
