@@ -6,34 +6,45 @@ on:
 
 jobs:
   tests:
-    runs-on: ubuntu-latest
-    timeout-minutes: 360
-    name: Testing ${{ github.repository }}
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
+    runs-on: ${{ matrix.platform == 'linux/amd64' && 'ubuntu-latest' || matrix.platform == 'linux/arm64' && 'ubuntu-24.04-arm' }}
+    name: testing on ${{ matrix.platform }} 
+    timeout-minutes: 30
     steps:
+      - name: Test notebooks
+        shell: bash
+        run: |
+          docker run -t ghcr.io/${{ github.repository }}:dev bash -c "\
+            bash /home/jovyan/aiida-start; \
+            jupyter nbconvert --to notebook --execute PTH2R_coarse-grained_tutorial.ipynb; \
+            sleep 300; \
+            verdi process list -a; \
+            ! verdi process list -a | grep -E '\[(3.*?)\]'; \
+            ! verdi process list -a | grep -E 'Waiting'; "
 
-    - name: Test notebooks
-      shell: bash
-      run: |
-        docker run -t ghcr.io/${{ github.repository }}:dev bash -c "\
-          bash /home/jovyan/aiida-start; \
-          jupyter nbconvert --to notebook --execute PTH2R_coarse-grained_tutorial.ipynb; \
-          sleep 300; \
-          verdi process list -a; \
-          ! verdi process list -a | grep -E '\[(3.*?)\]'; \
-          ! verdi process list -a | grep -E 'Waiting'; "
+  tag-release:
+    runs-on: ubuntu-24.04
+    name: tag release
+    needs:
+      - tests
+    steps:
+      - name: Authenticate with GHCR
+        id: auth
+        uses: docker/login-action@v3.4.0
+        with:
+          registry: "ghcr.io"
+          username: ${{github.actor}}
+          password: ${{secrets.BUILD_TOKEN}}
 
-    - name: Authenticate with GHCR
-      id: ghcr-auth
-      uses: docker/login-action@v3.4.0
-      with:
-        registry: "ghcr.io"
-        username: ${{github.actor}}
-        password: ${{secrets.BUILD_TOKEN}}
-
-    - name: Push new tags
-      shell: bash
-      run: |
-        docker buildx imagetools create \
-          --tag ghcr.io/${{ github.repository }}:latest \
-          --tag ghcr.io/${{ github.repository }}:${{ github.event.client_payload.tag }} \
-          ghcr.io/${{ github.repository }}:dev
+      - name: Push new tags
+        shell: bash
+        run: |
+          docker buildx imagetools create \
+            --tag ghcr.io/${{ github.repository }}:latest \
+            --tag ghcr.io/${{ github.repository }}:${{ github.event.client_payload.tag }} \
+            ghcr.io/${{ github.repository }}:dev
