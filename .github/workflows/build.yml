@@ -11,9 +11,127 @@ on:
         default: 'null'
 
 jobs:
-  base-build:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
+    runs-on: ${{ matrix.platform == 'linux/amd64' && 'ubuntu-latest' || matrix.platform == 'linux/arm64' && 'ubuntu-24.04-arm' }}
+    name: ${{ matrix.platform }} workshop-build
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4.2.2
+
+      - name: Prepare env
+        id: envvars
+        run: |
+          platform=${{ matrix.platform }}
+          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
+
+      - name: Metadata
+        id: meta
+        uses: docker/metadata-action@v5.7.0
+        with:
+          images: ghcr.io/${{ github.repository }}
+
+      - name: Authenticate with GHCR
+        id: auth
+        uses: docker/login-action@v3.4.0
+        with:
+          registry: ghcr.io
+          username: ${{github.actor}}
+          password: ${{secrets.BUILD_TOKEN}}
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v3.11.1
+
+      - name: Build and push by digest
+        id: build
+        uses: docker/build-push-action@v6.18.0
+        with:
+          platforms: ${{ matrix.platform }}
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: ghcr.io/${{ github.repository }}
+          outputs: type=image,push-by-digest=true,name-canonical=true,push=true
+
+      - name: Export digest
+        run: |
+          mkdir -p ${{ runner.temp }}/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: digests-${{ env.PLATFORM_PAIR }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  merge:
     runs-on: ubuntu-24.04
-    name: workshop-build
+    needs:
+      - build
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v4.3.0
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digests-*
+          merge-multiple: true
+
+      - name: Authenticate with GHCR
+        id: auth
+        uses: docker/login-action@v3.4.0
+        with:
+          registry: ghcr.io
+          username: ${{github.actor}}
+          password: ${{secrets.BUILD_TOKEN}}
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v3.11.1
+
+      - name: Metadata
+        id: meta
+        uses: docker/metadata-action@v5.7.0
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            dev
+
+      - name: Create manifest list and push
+        id: annotate
+        continue-on-error: true
+        working-directory: ${{ runner.temp }}/digests
+        run: |
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            --annotation='index:org.opencontainers.image.description=${{ github.event.repository.description }}' \
+            --annotation='index:org.opencontainers.image.licenses=MIT' \
+            --annotation='index:org.opencontainers.image.created=${{ steps.timestamp.outputs.timestamp }}' \
+            --annotation='index:org.opencontainers.image.url=${{ github.event.repository.url }}' \
+            --annotation='index:org.opencontainers.image.source=${{ github.event.repository.url }}' \
+            $(printf 'ghcr.io/${{ github.repository }}@sha256:%s ' *)
+
+      - name: Create manifest list and push without annotations
+        if: steps.annotate.outcome == 'failure'
+        working-directory: ${{ runner.temp }}/digests
+        run: |
+          docker buildx imagetools create  $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf 'ghcr.io/${{ github.repository }}@sha256:%s ' *)
+
+      - name: Inspect image
+        run: |
+          docker buildx imagetools inspect ghcr.io/${{ github.repository }}:dev
+
+  test:
+    runs-on: ubuntu-24.04
+    name: orchestrate tests
+    needs: 
+      - merge
     steps:
       - name: tag
         id: version-tag
@@ -23,48 +141,6 @@ jobs:
           else
             echo "tag=${{ github.event.client_payload.tag }}" >> $GITHUB_OUTPUT
           fi
-
-      - name: checkout
-        uses: actions/checkout@v4.2.2
-
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v5.7.0
-        with:
-          images: ghcr.io/${{ github.repository }}
-          tags: |
-            dev
-          labels: |
-            annotation-index.org.opencontainers.image.source=https://github.com/${{ github.repository }}
-            annotation-index.org.opencontainers.image.licenses=MIT
-            annotation-index.org.opencontainers.image.description=A repository containing the build steps for the PSDI workshop on AiiDA tools for data collection.
-        env:
-          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
-
-      - name: Set up QEMU
-        id: qemu
-        uses: docker/setup-qemu-action@v3.6.0
-
-      - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v3.11.1
-
-      - name: Authenticate with GHCR
-        id: ghcr-auth
-        uses: docker/login-action@v3.4.0
-        with:
-          registry: ghcr.io
-          username: ${{github.actor}}
-          password: ${{secrets.BUILD_TOKEN}}
-
-      - name: Build and push
-        id: build-push
-        uses: docker/build-push-action@v6.18.0
-        with:
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          annotations: ${{ steps.meta.outputs.annotations }}
 
       - name: Dispatch Tests
         uses: peter-evans/repository-dispatch@v3.0.0
