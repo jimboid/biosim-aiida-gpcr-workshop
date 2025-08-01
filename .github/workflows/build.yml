@@ -32,7 +32,7 @@ jobs:
 
       - name: Metadata
         id: meta
-        uses: docker/metadata-action@v5.7.0
+        uses: docker/metadata-action@v5.8.0
         with:
           images: ghcr.io/${{ github.repository }}
 
@@ -97,7 +97,7 @@ jobs:
 
       - name: Metadata
         id: meta
-        uses: docker/metadata-action@v5.7.0
+        uses: docker/metadata-action@v5.8.0
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
