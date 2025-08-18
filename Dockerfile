@@ -31,7 +31,7 @@ WORKDIR $HOME
 
 # Python Dependencies for the md_workshop
 RUN conda install mamba
-RUN mamba install -c conda-forge -y aiida-core=2.6.3
+RUN mamba install -c conda-forge -y aiida-core
 RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
       conda install conda-forge/linux-64::gromacs=2024.5=nompi_h5f56185_100 -y; \
     elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
